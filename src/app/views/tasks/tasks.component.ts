@@ -15,6 +15,5 @@ export class TasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.tasks = this.dataHandlerService.getTasks();
-    console.log(this.tasks);
   }
 }
