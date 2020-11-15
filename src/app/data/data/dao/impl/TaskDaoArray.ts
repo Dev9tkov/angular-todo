@@ -1,10 +1,15 @@
 import {TaskDao} from '../interface/TaskDao';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Category} from '../../../../model/Category';
 import {Priority} from '../../../../model/Priority';
 import {Task} from '../../../../model/Task';
+import {TestData} from '../../../TestData';
 
-export class TaskDaoArray implements TaskDao{
+export class TaskDaoArray implements TaskDao {
+  getAll(): Observable<Task[]> {
+    return of(TestData.tasks); // of - метод rxjs для оборачивания в observable TestData.tasks
+  }
+
   add(T): Observable<Task> {
     return undefined;
   }
@@ -14,11 +19,7 @@ export class TaskDaoArray implements TaskDao{
   }
 
   get(id: number): Observable<Task> {
-    return undefined;
-  }
-
-  getAll(): Observable<Task[]> {
-    return undefined;
+    return of(TestData.tasks.find(todo => todo.id === id));
   }
 
   getCompletedCountInCategory(category: Category): Observable<number> {
