@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Task} from './model/Task';
 import {DataHandlerService} from './service/data-handler.service';
+import {Category} from './model/Category';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +11,13 @@ import {DataHandlerService} from './service/data-handler.service';
 export class AppComponent implements OnInit {
   title = 'Todo';
   tasks: Task[];
+  categories: Category[];
 
   constructor(private dataHandlerService: DataHandlerService) {
   }
 
   ngOnInit(): void {
     this.dataHandlerService.getAllTasks().subscribe(tasks => this.tasks = tasks);
+    this.dataHandlerService.getAllCategories().subscribe(categories => this.categories = categories);
   }
 }
