@@ -2,7 +2,8 @@
   <div class="card-header card-header-warning">
     <h4 class="card-title">Список задач</h4>
   </div>
-  <div class="card-body table-responsive">
+  <div class="card-body table-responsive"
+       *ngIf="tasks.length > 0">
     <table [dataSource]="dataSource" mat-table matSort>
 
       <!--  цвет приоритета  -->
@@ -36,10 +37,10 @@
       <!--дата выполнения-->
       <ng-container matColumnDef="date">
         <th *matHeaderCellDef mat-header-cell mat-sort-header> Срок</th>
-        <td class="col-date" *matCellDef="let task" [ngClass]="{'completed': task.completed, 'nodate': task.date == null}"
+        <td class="col-date" *matCellDef="let task" [ngClass]="{'completed': task.completed, 'novalue': task.date == null}"
             mat-cell>
 
-          {{task.date | date: "short"}}
+          {{task.date ? (task.date | date: "short") : "Без даты"}}
 
         </td>
       </ng-container>
@@ -48,7 +49,7 @@
       <ng-container matColumnDef="priority">
         <th *matHeaderCellDef mat-header-cell mat-sort-header> Приоритет</th>
         <td class="col-priority" *matCellDef="let task"
-            [ngClass]="{'completed': task.completed, 'nopriority': task.priority == null}"
+            [ngClass]="{'completed': task.completed, 'novalue': task.priority == null}"
             mat-cell
         >
 
@@ -79,5 +80,8 @@
       <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
     </table>
     <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+  </div>
+  <div *ngIf="tasks.length == 0">
+    <p class="not-found">Ничего не найдено</p>
   </div>
 </div>
