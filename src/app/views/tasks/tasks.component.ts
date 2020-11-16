@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {DataHandlerService} from '../../service/data-handler.service';
 import {Task} from '../../model/Task';
 import {MatTableDataSource} from '@angular/material/table';
@@ -20,9 +20,19 @@ export class TasksComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   // Текущие задачи для отображения на странице
-  @Input() tasks: Task[]; // напрямую не присваиваем значения в переменную, только через @Input
+  tasks: Task[];
 
-  constructor(private dataHandlerService: DataHandlerService) { }
+  @Input('tasks') // напрямую не присваиваем значения в переменную, только через @Input
+  private set setTasks(tasks: Task[]) {
+    this.tasks = tasks;
+    this.fillTable();
+  }
+
+  @Output()
+  updateTask = new EventEmitter<Task>();
+
+  constructor(private dataHandlerService: DataHandlerService) {
+  }
 
   ngOnInit(): void {
     // обязательно нужно создать для таблицы, в него присваивается любой источник
@@ -42,6 +52,9 @@ export class TasksComponent implements OnInit {
   }
 
   fillTable(): void {
+    if (!this.dataSource) {
+      return;
+    }
     this.dataSource.data = this.tasks; // обновить источник данных
     this.addTableObjects();
 
@@ -72,5 +85,9 @@ export class TasksComponent implements OnInit {
   private addTableObjects(): void {
     this.dataSource.sort = this.sort; // компонент для сортировки данных (если необходимо)
     this.dataSource.paginator = this.paginator; // обновить компонент постраничности (кол-во записей, страниц)
+  }
+
+  onclickTask(task: Task): void {
+    this.updateTask.emit(task);
   }
 }
