@@ -31,7 +31,7 @@
             *matCellDef="let task"
             [class.completed]="task.completed"
             mat-cell
-            (click)="onclickTask($event)"
+            (click)="openEditTaskDialog(task)"
         >
 
           {{task.title}}
